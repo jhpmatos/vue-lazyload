@@ -255,6 +255,9 @@ export default function (Vue) {
                 el.style[bindType] = 'url(' + src + ')'
             } else if (el.getAttribute('src') !== src) {
                 el.setAttribute('src', src)
+                if (el.hasAttribute('data-srcset')) {
+                    el.setAttribute('srcset', el.getAttribute('data-srcset'));
+                }
             }
 
             el.setAttribute('lazy', state)
