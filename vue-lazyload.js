@@ -1,5 +1,5 @@
 /*!
- * Vue-Lazyload.js v1.0.1
+ * Vue-Lazyload.js v1.0.2
  * (c) 2017 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
