@@ -9,7 +9,7 @@
   "dependencies": {},
   "repository": {
     "type": "git",
-    "url": "https://github.com/hilongjw/vue-lazyload.git"
+    "url": "https://github.com/jhpmatos/vue-lazyload.git"
   },
   "keywords": [
     "vue-lazyload",
