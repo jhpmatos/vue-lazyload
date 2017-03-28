@@ -254,8 +254,8 @@ export default function (Vue) {
             if (bindType) {
                 el.style[bindType] = 'url(' + src + ')'
             } else if (el.getAttribute('src') !== src) {
-                el.setAttribute('src', src)
-                if (el.hasAttribute('data-srcset')) {
+                el.setAttribute('src', src);
+                if (state == 'loaded' && el.hasAttribute('data-srcset')) {
                     el.setAttribute('srcset', el.getAttribute('data-srcset'));
                 }
             }
