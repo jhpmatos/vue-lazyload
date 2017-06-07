@@ -1,6 +1,6 @@
 {
-  "name": "vue-lazyload",
-  "version": "1.0.4",
+  "name": "vue-lazyload-custom",
+  "version": "1.0.5",
   "description": "Vue module for lazy-loading images in your vue.js applications.",
   "main": "vue-lazyload.js",
   "scripts": {
@@ -18,9 +18,6 @@
     "vue-directive"
   ],
   "author": "Awe <hilongjw@gmail.com>",
-  "bugs": {
-    "url": "https://github.com/hilongjw/vue-lazyload/issues"
-  },
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.14.0",

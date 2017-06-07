@@ -27,7 +27,7 @@ function some (arr, fn) {
     return has
 }
 
-function getBestSelectionFromSrcset (el, scale) {
+function getBestSelectionFromSrcset (el, scale, supportsWebp) {
     if (el.tagName !== 'IMG' || !el.getAttribute('data-srcset')) return
 
     let options = el.getAttribute('data-srcset')
@@ -40,7 +40,7 @@ function getBestSelectionFromSrcset (el, scale) {
     let tmpWidth
 
     options = options.trim().split(',')
-    
+
     options.map(item => {
         item = item.trim()
         spaceIndex = item.lastIndexOf(' ')
@@ -51,7 +51,14 @@ function getBestSelectionFromSrcset (el, scale) {
             tmpSrc = item.substr(0, spaceIndex)
             tmpWidth = parseInt(item.substr(spaceIndex + 1, item.length - spaceIndex - 2), 10)
         }
-        result.push([tmpWidth, tmpSrc])
+
+        if (indexOf('.webp', tmpSrc.length - 5)) {
+            if (supportsWebp) {
+                result.push([tmpWidth, tmpSrc])
+            }
+        } else {
+            result.push([tmpWidth, tmpSrc])
+        }
     })
 
     result.sort(function (a, b) {

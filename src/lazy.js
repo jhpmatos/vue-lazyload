@@ -104,7 +104,7 @@ export default function (Vue) {
             let { src, loading, error } = this._valueFormatter(binding.value)
 
             Vue.nextTick(() => {
-                src = getBestSelectionFromSrcset(el, this.options.scale) || src
+                src = getBestSelectionFromSrcset(el, this.options.scale, this.options.supportWebp) || src
 
                 const container = Object.keys(binding.modifiers)[0]
                 let $parent
@@ -152,9 +152,9 @@ export default function (Vue) {
 
             const exist = find(this.ListenerQueue, item => item.el === el)
 
-             exist && exist.src !== src && exist.update({
-                 src,
-                 loading,
+            exist && exist.src !== src && exist.update({
+                src,
+                loading,
                 error
             })
             this.lazyLoadHandler()
