@@ -52,7 +52,7 @@ function getBestSelectionFromSrcset (el, scale, supportsWebp) {
             tmpWidth = parseInt(item.substr(spaceIndex + 1, item.length - spaceIndex - 2), 10)
         }
 
-        if (indexOf('.webp', tmpSrc.length - 5)) {
+        if (tmpSrc.indexOf('.webp', tmpSrc.length - 5) !== -1) {
             if (supportsWebp) {
                 result.push([tmpWidth, tmpSrc])
             }
