@@ -1,12 +1,12 @@
 const inBrowser = typeof window !== 'undefined'
 
-function remove (arr, item) {
+function remove(arr, item) {
     if (!arr.length) return
     const index = arr.indexOf(item)
     if (index > -1) return arr.splice(index, 1)
 }
 
-function assign (target, source) {
+function assign(target, source) {
     if (!target || !source) return target || {}
     if (target instanceof Object) {
         for (let key in source) {
@@ -16,7 +16,7 @@ function assign (target, source) {
     return target
 }
 
-function some (arr, fn) {
+function some(arr, fn) {
     let has = false
     for (let i = 0, len = arr.length; i < len; i++) {
         if (fn(arr[i])) {
@@ -27,7 +27,34 @@ function some (arr, fn) {
     return has
 }
 
-function getBestSelectionFromSrcset (el, scale, supportsWebp) {
+function updateSrcsetFormat(srcset, supportsWebp) {
+    let result = '';
+    let spaceIndex
+    let tmpSrc
+
+    srcset = srcset.trim().split(',')
+    srcset.map(item => {
+        item = item.trim()
+        spaceIndex = item.lastIndexOf(' ')
+        if (spaceIndex === -1) {
+            tmpSrc = item
+        } else {
+            tmpSrc = item.substr(0, spaceIndex)
+        }
+
+        if (tmpSrc.indexOf('.webp', tmpSrc.length - 5) !== -1) {
+            if (supportsWebp) {
+                result += item + ',';
+            }
+        } else if(!supportsWebp) {
+            result += item + ',';
+        }
+    })
+
+    return result.slice(0, -1);
+}
+
+function getBestSelectionFromSrcset(el, scale) {
     if (el.tagName !== 'IMG' || !el.getAttribute('data-srcset')) return
 
     let options = el.getAttribute('data-srcset')
@@ -52,16 +79,10 @@ function getBestSelectionFromSrcset (el, scale, supportsWebp) {
             tmpWidth = parseInt(item.substr(spaceIndex + 1, item.length - spaceIndex - 2), 10)
         }
 
-        if (tmpSrc.indexOf('.webp', tmpSrc.length - 5) !== -1) {
-            if (supportsWebp) {
-                result.push([tmpWidth, tmpSrc])
-            }
-        } else {
-            result.push([tmpWidth, tmpSrc])
-        }
+        result.push([tmpWidth, tmpSrc])
     })
 
-    result.sort(function (a, b) {
+    result.sort(function(a, b) {
         if (a[0] < b[0]) {
             return -1
         }
@@ -93,7 +114,7 @@ function getBestSelectionFromSrcset (el, scale, supportsWebp) {
     return bestSelectedSrc
 }
 
-function find (arr, fn) {
+function find(arr, fn) {
     let item
     for (let i = 0, len = arr.length; i < len; i++) {
         if (fn(arr[i])) {
@@ -106,7 +127,7 @@ function find (arr, fn) {
 
 const getDPR = (scale = 1) => inBrowser && window.devicePixelRatio || scale
 
-function supportWebp () {
+function supportWebp() {
     if (!inBrowser) return false
 
     let support = true
@@ -127,21 +148,21 @@ function supportWebp () {
     return support
 }
 
-function throttle (action, delay) {
+function throttle(action, delay) {
     let timeout = null
     let lastRun = 0
-    return function () {
+    return function() {
         if (timeout) {
             return
         }
         let elapsed = Date.now() - lastRun
         let context = this
         let args = arguments
-        let runCallback = function () {
-                lastRun = Date.now()
-                timeout = false
-                action.apply(context, args)
-            }
+        let runCallback = function() {
+            lastRun = Date.now()
+            timeout = false
+            action.apply(context, args)
+        }
         if (elapsed >= delay) {
             runCallback()
         }
@@ -151,33 +172,34 @@ function throttle (action, delay) {
     }
 }
 
-function testSupportsPassive () {
+function testSupportsPassive() {
     if (!inBrowser) return
     let support = false
     try {
         let opts = Object.defineProperty({}, 'passive', {
             get: function() {
-              support = true
+                support = true
             }
         })
         window.addEventListener("test", null, opts)
-    } catch (e) {}
+    } catch (e) {
+    }
     return support
 }
 
 const supportsPassive = testSupportsPassive()
 
 const _ = {
-    on (el, type, func) {
+    on(el, type, func) {
         if (supportsPassive) {
             el.addEventListener(type, func, {
-                passive:true
+                passive: true
             })
         } else {
             el.addEventListener(type, func, false)
         }
     },
-    off (el, type, func) {
+    off(el, type, func) {
         el.removeEventListener(type, func)
     }
 }
@@ -186,7 +208,7 @@ const loadImageAsync = (item, resolve, reject) => {
     let image = new Image()
     image.src = item.src
 
-    image.onload = function () {
+    image.onload = function() {
         resolve({
             naturalHeight: image.naturalHeight,
             naturalWidth: image.naturalWidth,
@@ -194,15 +216,15 @@ const loadImageAsync = (item, resolve, reject) => {
         })
     }
 
-    image.onerror = function (e) {
+    image.onerror = function(e) {
         reject(e)
     }
 }
 
 const style = (el, prop) => {
     return typeof getComputedStyle !== 'undefined'
-    ? getComputedStyle(el, null).getPropertyValue(prop)
-    : el.style[prop]
+        ? getComputedStyle(el, null).getPropertyValue(prop)
+        : el.style[prop]
 }
 
 const overflow = (el) => {
@@ -236,11 +258,11 @@ const scrollParent = (el) => {
     return window
 }
 
-function isObject (obj) {
-  return obj !== null && typeof obj === 'object'
+function isObject(obj) {
+    return obj !== null && typeof obj === 'object'
 }
 
-function ObjectKeys (obj) {
+function ObjectKeys(obj) {
     if (!(obj instanceof Object)) return []
     if (Object.keys) {
         return Object.keys(obj)
@@ -269,5 +291,6 @@ export {
     scrollParent,
     loadImageAsync,
     getBestSelectionFromSrcset,
-    ObjectKeys
+    ObjectKeys,
+    updateSrcsetFormat
 }

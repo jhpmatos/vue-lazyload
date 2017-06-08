@@ -10,7 +10,8 @@ import {
     scrollParent,
     getBestSelectionFromSrcset,
     assign,
-    isObject
+    isObject,
+    updateSrcsetFormat
 } from './util'
 
 import ReactiveListener from './listener'
@@ -104,7 +105,12 @@ export default function (Vue) {
             let { src, loading, error } = this._valueFormatter(binding.value)
 
             Vue.nextTick(() => {
-                src = getBestSelectionFromSrcset(el, this.options.scale, this.options.supportWebp) || src
+
+                if (el.hasAttribute('data-srcset')) {
+                    el.setAttribute('data-srcset', updateSrcsetFormat(el.getAttribute('data-srcset'), this.options.supportWebp));
+                }
+
+                src = getBestSelectionFromSrcset(el, this.options.scale) || src
 
                 const container = Object.keys(binding.modifiers)[0]
                 let $parent
